@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Dashboard - PawFund</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">PawFund</a>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+        </ul>
+      </nav>
+      <div class="auth-buttons desktop-only" id="auth-buttons">
+        <!-- Will be populated by updateAuthUI() -->
+      </div>
+      <button class="menu-toggle" aria-label="Toggle Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+      <nav>
+        <ul id="mobile-menu-items">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+          <!-- Auth items will be appended here -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="dashboard-section container">
+      <h1>Your Dashboard</h1>
+      
+      <div class="dashboard-tabs">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="donations">Donation History</button>
+          <button class="tab-btn" data-tab="profile">Profile</button>
+        </div>
+        
+        <div class="tab-content active" id="overview">
+          <div class="dashboard-summary">
+            <div class="dashboard-card">
+              <h3>Total Donations</h3>
+              <p class="metric" id="total-donations">$0.00</p>
+              <p class="metric-description">Your lifetime contribution</p>
+            </div>
+            
+            <div class="dashboard-card">
+              <h3>Shelters Supported</h3>
+              <p class="metric" id="shelters-supported">0</p>
+              <p class="metric-description">Number of shelters you've helped</p>
+            </div>
+          </div>
+          
+          <div class="dashboard-card activity-card">
+            <h3>Recent Activity</h3>
+            <p class="metric-description">Your recent donations</p>
+            
+            <div id="recent-activity" class="activity-list">
+              <!-- Activity items will be added dynamically -->
+              <p class="no-data hidden">You haven't made any donations yet.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="donations">
+          <div class="dashboard-card activity-card">
+            <h3>Donation History</h3>
+            <p class="metric-description">All your contributions</p>
+            
+            <div id="donation-history" class="activity-list">
+              <!-- Donation history will be added dynamically -->
+              <p class="no-data hidden">You haven't made any donations yet.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="profile">
+          <div class="dashboard-card">
+            <h3>Your Profile</h3>
+            <p class="metric-description">Manage your account information</p>
+            
+            <div class="profile-info">
+              <div class="profile-item">
+                <p class="profile-label">Name</p>
+                <p id="profile-name" class="profile-value"></p>
+              </div>
+              <div class="profile-item">
+                <p class="profile-label">Email</p>
+                <p id="profile-email" class="profile-value"></p>
+              </div>
+              <div class="profile-item">
+                <p class="profile-label">Member Since</p>
+                <p id="profile-date" class="profile-value"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-info">
+        <h3>PawFund</h3>
+        <p>Connecting animal lovers with shelters in need of support.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register-user.html">Register as User</a></li>
+          <li><a href="register-shelter.html">Register as Shelter</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <address>
+          <p>123 Rescue Lane</p>
+          <p>Animal City, AC 12345</p>
+          <p>info@pawfund.example</p>
+          <p>(123) 456-7890</p>
+        </address>
+      </div>
+    </div>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; <span id="current-year"></span> PawFund. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize the dashboard page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const currentUser = localStorage.getItem('currentUser');
+      if (!currentUser) {
+        // Redirect to login page
+        window.location.href = 'login.html?redirect=dashboard.html';
+        return;
+      }
+      
+      updateAuthUI();
+      loadDashboardData();
+      setupTabs();
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+      
+      function setupTabs() {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+          });
+        });
+      }
+      
+      function loadDashboardData() {
+        const user = JSON.parse(currentUser);
+        
+        // Get user's donations
+        const allDonations = JSON.parse(localStorage.getItem('donations') || '[]');
+        const userDonations = allDonations.filter(donation => donation.userId === user.id);
+        
+        // Update statistics
+        const totalDonations = userDonations.reduce((sum, donation) => sum + donation.amount, 0);
+        document.getElementById('total-donations').textContent = formatCurrency(totalDonations);
+        
+        const uniqueShelters = new Set(userDonations.map(donation => donation.shelterId));
+        document.getElementById('shelters-supported').textContent = uniqueShelters.size;
+        
+        // Update profile information
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-date').textContent = formatDate(user.createdAt);
+        
+        // Display donation history
+        displayDonationHistory(userDonations, 'donation-history');
+        displayDonationHistory(userDonations.slice(0, 5), 'recent-activity');
+      }
+      
+      function displayDonationHistory(donations, containerId) {
+        const container = document.getElementById(containerId);
+        const noDataElement = container.querySelector('.no-data');
+        
+        // Clear previous content except for the no-data message
+        Array.from(container.children).forEach(child => {
+          if (!child.classList.contains('no-data')) {
+            container.removeChild(child);
+          }
+        });
+        
+        if (donations.length === 0) {
+          noDataElement.classList.remove('hidden');
+          return;
+        }
+        
+        noDataElement.classList.add('hidden');
+        
+        donations.forEach(donation => {
+          const shelter = getShelterById(donation.shelterId);
+          
+          const donationItem = document.createElement('div');
+          donationItem.className = 'activity-item';
+          
+          donationItem.innerHTML = `
+            <div class="activity-info">
+              <p class="activity-title">${shelter ? shelter.name : 'Unknown Shelter'}</p>
+              <p class="activity-subtitle">${donation.type === 'recurring' 
+                ? `Recurring (${donation.frequency})` 
+                : 'One-time donation'}</p>
+              <p class="activity-date">${formatDate(donation.createdAt)}</p>
+            </div>
+            <p class="activity-amount">${formatCurrency(donation.amount)}</p>
+          `;
+          
+          container.appendChild(donationItem);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
+

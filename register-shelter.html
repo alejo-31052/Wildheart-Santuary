@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Shelter - PawFund</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">PawFund</a>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+        </ul>
+      </nav>
+      <div class="auth-buttons desktop-only">
+        <a href="login.html" class="btn-ghost">Login</a>
+        <a href="register-user.html" class="btn-primary">Register</a>
+      </div>
+      <button class="menu-toggle" aria-label="Toggle Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register-user.html">Register as User</a></li>
+          <li><a href="register-shelter.html" class="active">Register as Shelter</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="auth-section container">
+      <div class="auth-card shelter-register-card">
+        <div class="auth-header">
+          <h1>Register Your Shelter</h1>
+          <p>Provide information about your animal shelter to start receiving donations</p>
+        </div>
+        
+        <div class="auth-content">
+          <div class="alert alert-error hidden" id="register-error"></div>
+          
+          <form id="shelter-register-form" class="auth-form">
+            <div class="form-group">
+              <label for="shelter-name">Shelter Name</label>
+              <input type="text" id="shelter-name" name="name" placeholder="Happy Tails Rescue" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="description">Short Description</label>
+              <input type="text" id="description" name="description" placeholder="A brief description of your shelter" required>
+              <p class="form-hint">A short description that will appear on shelter cards (max 100 characters)</p>
+            </div>
+            
+            <div class="form-group">
+              <label for="long-description">Detailed Description</label>
+              <textarea id="long-description" name="longDescription" placeholder="Provide detailed information about your shelter, its mission, and how donations will be used" rows="5"></textarea>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="123 Rescue Lane, Anytown, USA">
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-email">Contact Email</label>
+                <input type="email" id="contact-email" name="contactEmail" placeholder="info@yourshelter.org" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-phone">Contact Phone</label>
+                <input type="tel" id="contact-phone" name="contactPhone" placeholder="(123) 456-7890">
+              </div>
+              
+              <div class="form-group">
+                <label for="website">Website</label>
+                <input type="url" id="website" name="website" placeholder="https://www.yourshelter.org">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="amazon-wishlist">Amazon Wishlist URL</label>
+              <input type="url" id="amazon-wishlist" name="amazonWishlist" placeholder="https://www.amazon.com/hz/wishlist/ls/...">
+              <p class="form-hint">If you have an Amazon wishlist, donors can purchase items directly for your shelter</p>
+            </div>
+            
+            <div class="form-group">
+              <label for="image">Shelter Image</label>
+              <input type="file" id="image" name="image" accept="image/*" class="file-input">
+              <p class="form-hint">Upload an image of your shelter or the animals you help (max 2MB)</p>
+              
+              <div id="image-preview-container" class="image-preview hidden">
+                <p class="preview-label">Preview:</p>
+                <img id="image-preview" src="#" alt="Shelter preview">
+              </div>
+            </div>
+            
+            <button type="submit" class="btn-primary full-width" id="register-button">Register Shelter</button>
+          </form>
+        </div>
+        
+        <div class="auth-footer">
+          <p>Already registered your shelter? <a href="login.html">Login</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-info">
+        <h3>PawFund</h3>
+        <p>Connecting animal lovers with shelters in need of support.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register-user.html">Register as User</a></li>
+          <li><a href="register-shelter.html">Register as Shelter</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <address>
+          <p>123 Rescue Lane</p>
+          <p>Animal City, AC 12345</p>
+          <p>info@pawfund.example</p>
+          <p>(123) 456-7890</p>
+        </address>
+      </div>
+    </div>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; <span id="current-year"></span> PawFund. All rights reserved.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Initialize the shelter registration page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if already logged in
+      const currentUser = localStorage.getItem('currentUser');
+      if (currentUser) {
+        // Redirect to home
+        window.location.href = 'index.html';
+      }
+      
+      // Handle image upload preview
+      const imageInput = document.getElementById('image');
+      const imagePreviewContainer = document.getElementById('image-preview-container');
+      const imagePreview = document.getElementById('image-preview');
+      
+      imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // Check file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          const errorElement = document.getElementById('register-error');
+          errorElement.textContent = 'Image size should be less than 2MB';
+          errorElement.classList.remove('hidden');
+          return;
+        }
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+          imagePreviewContainer.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      });
+      
+      // Handle registration form submission
+      const registerForm = document.getElementById('shelter-register-form');
+      registerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('shelter-name').value;
+        const description = document.getElementById('description').value;
+        const longDescription = document.getElementById('long-description').value;
+        const location = document.getElementById('location').value;
+        const contactEmail = document.getElementById('contact-email').value;
+        const contactPhone = document.getElementById('contact-phone').value;
+        const website = document.getElementById('website').value;
+        const amazonWishlist = document.getElementById('amazon-wishlist').value;
+        const imageFile = document.getElementById('image').files[0];
+        
+        // Update button state
+        const registerButton = document.getElementById('register-button');
+        registerButton.textContent = 'Registering shelter...';
+        registerButton.disabled = true;
+        
+        // Clear previous errors
+        const errorElement = document.getElementById('register-error');
+        errorElement.textContent = '';
+        errorElement.classList.add('hidden');
+        
+        // Validate inputs
+        if (!name || !description || !contactEmail) {
+          errorElement.textContent = 'Name, description, and contact email are required';
+          errorElement.classList.remove('hidden');
+          registerButton.textContent = 'Register Shelter';
+          registerButton.disabled = false;
+          return;
+        }
+        
+        // Process image if provided
+        if (imageFile) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            // Register shelter with image
+            registerShelter({
+              name,
+              description,
+              longDescription,
+              location,
+              contactEmail,
+              contactPhone,
+              website,
+              amazonWishlist,
+              image: e.target.result
+            }, function(error, shelter) {
+              handleRegistrationResult(error, shelter);
+            });
+          };
+          reader.readAsDataURL(imageFile);
+        } else {
+          // Register shelter without image
+          registerShelter({
+            name,
+            description,
+            longDescription,
+            location,
+            contactEmail,
+            contactPhone,
+            website,
+            amazonWishlist
+          }, function(error, shelter) {
+            handleRegistrationResult(error, shelter);
+          });
+        }
+        
+        function handleRegistrationResult(error, shelter) {
+          if (error) {
+            errorElement.textContent = error;
+            errorElement.classList.remove('hidden');
+            registerButton.textContent = 'Register Shelter';
+            registerButton.disabled = false;
+          } else {
+            // Redirect to the shelter page
+            setTimeout(function() {
+              window.location.href = `shelter-detail.html?id=${shelter.id}`;
+            }, 500);
+          }
+        }
+      });
+      
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
+
