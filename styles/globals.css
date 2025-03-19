@@ -92,3 +92,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.success-message {
+  display: none;
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: #d1e7dd;
+  color: #0f5132;
+  font-weight: bold;
+  border: 1px solid #badbcc;
+  text-align: center;
+}

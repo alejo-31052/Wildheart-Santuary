@@ -1,3 +1,11 @@
+async function registerUser() {
+  console.log("Register button clicked!"); // <-- Add this
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+}
+
+
 // Function to check if user is logged in
 function isLoggedIn() {
   return localStorage.getItem("currentUser") !== null
@@ -167,4 +175,98 @@ function saveDonation(shelterId, amount, type, frequency) {
 
   return true
 }
+
+
+async function registerUser() {
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const registerBtn = document.getElementById('register-button'); 
+registerBtn.disabled = true;
+registerBtn.textContent = 'Creating account...';
+
+
+  try {
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    await db.collection('users').doc(user.uid).set({
+      name: name,
+      email: email,
+      createdAt: new Date()
+    });
+
+    // Simple popup confirmation
+    Swal.fire({
+      icon: 'success',
+      title: 'Account Created!',
+      text: 'Your account has been successfully registered. Redirecting to login...',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'OK',
+      timer: 2500,
+      timerProgressBar: true,
+      didClose: () => {
+        window.location.href = 'login.html';
+      }
+    });
+    
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops!',
+      text: error.message,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Try Again'
+    });
+  }
+}
+
+  
+async function loginUser() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    // Fetch user data from Firestore
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    const userData = userDoc.data();
+
+    // Convert createdAt from Firestore timestamp to a plain string
+    const createdAtDate = userData.createdAt.toDate().toISOString();
+
+    // Store user info in localStorage
+    const currentUser = {
+      id: user.uid,
+      name: userData.name,
+      email: userData.email,
+      createdAt: createdAtDate
+    };
+
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Welcome back!',
+      text: 'Login successful! Redirecting to dashboard...',
+      confirmButtonColor: '#3085d6',
+      timer: 2000,
+      timerProgressBar: true,
+      didClose: () => {
+        window.location.href = 'dashboard.html';
+      }
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Login Failed',
+      text: error.message,
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Try Again'
+    });
+  }
+}
+
 
