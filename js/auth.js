@@ -112,29 +112,6 @@ function registerUser(name, email, password, callback) {
   callback(null, newUser)
 }
 
-// Function to handle shelter registration
-// function registerShelter(shelterData, callback) {
-//   // Get existing custom shelters from localStorage
-//   const customShelters = JSON.parse(localStorage.getItem("customShelters") || "[]")
-
-//   // Check if shelter name already exists
-//   if (customShelters.some((shelter) => shelter.name === shelterData.name)) {
-//     return callback("A shelter with this name already exists")
-//   }
-
-//   // Create new shelter
-//   const newShelter = {
-//     id: `custom-${Date.now()}`,
-//     ...shelterData,
-//     donationNeeds: [],
-//   }
-
-//   // Add shelter to localStorage
-//   customShelters.push(newShelter)
-//   localStorage.setItem("customShelters", JSON.stringify(customShelters))
-//   callback(null, newShelter)
-// }
-
 // Function to handle logout
 function logout() {
   localStorage.removeItem("currentUser")

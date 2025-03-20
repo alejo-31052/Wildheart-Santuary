@@ -41,71 +41,6 @@ function displayFeaturedShelters() {
   featuredSheltersContainer.innerHTML = shelterCardsHTML
 }
 
-// Display all shelters on shelters page
-async function displayAllShelters() {
-  const sheltersGrid = document.getElementById('all-shelters');
-  sheltersGrid.innerHTML = '';
-
-  try {
-    const sheltersSnapshot = await firebase.firestore().collection('shelters').get();
-
-    if (sheltersSnapshot.empty) {
-      sheltersGrid.innerHTML = '<p>No shelters found.</p>';
-      return;
-    }
-
-    sheltersSnapshot.forEach((doc) => {
-      const shelter = doc.data();
-
-      const shelterCard = `
-        <div class="shelter-card">
-          <div class="shelter-card-image">
-            <img src="${shelter.image || 'https://placehold.co/500x300?text=No+Image'}" alt="${shelter.name}">
-          </div>
-          <div class="shelter-card-content">
-            <h3>${shelter.name}</h3>
-            <p>${shelter.description}</p>
-            <a href="shelter-detail.html?id=${doc.id}" class="btn-primary">Donate Now</a>
-          </div>
-        </div>
-      `;
-
-      sheltersGrid.insertAdjacentHTML('beforeend', shelterCard);
-    });
-
-  } catch (error) {
-    console.error('Error fetching shelters from Firebase:', error);
-    sheltersGrid.innerHTML = '<p>Error loading shelters. Please try again later.</p>';
-  }
-}
-
-
-// Load shelter details on shelter detail page
-function loadShelterDetails(shelterId) {
-  const shelterDetailContainer = document.getElementById("shelter-detail")
-  if (!shelterDetailContainer) return
-
-  // Get shelter by ID
-  const shelter = getShelterById(shelterId)
-
-  // Update page title
-  document.title = shelter ? `${shelter.name} - PawFund` : "Shelter Not Found - PawFund"
-
-  // Create HTML for shelter detail
-  shelterDetailContainer.innerHTML = createShelterDetail(shelter)
-
-  // If shelter not found, show error message
-  if (!shelter) {
-    document.querySelector(".shelter-not-found").classList.remove("hidden")
-    return
-  }
-
-  // Setup tab functionality
-  setupTabs()
-
-  // Setup donation form functionality
-  setupDonationForm(shelterId)
-}
 
 // Setup tab functionality
 function setupTabs() {
@@ -304,7 +239,7 @@ async function loadShelterDetails(shelterId) {
         ${shelter.address ? `<p><strong>Address:</strong> ${shelter.address}</p>` : ""}
         ${shelter.cityProvince ? `<p><strong>City & Province:</strong> ${shelter.cityProvince}</p>` : ""}
         ${shelter.country ? `<p><strong>Country:</strong> ${shelter.country}</p>` : ""}
-        ${shelter.contactEmail ? `<p><strong>Email:</strong> ${shelter.contactEmail}</p>` : ""}
+        ${shelter.contactEmail ? `<p><strong>Email:</strong> <a href="mailto:${shelter.contactEmail}">${shelter.contactEmail}</a></p>` : ""}
         ${shelter.contactPhone ? `<p><strong>Phone:</strong> ${shelter.contactPhone}</p>` : ""}
         ${shelter.website ? `<p><strong>Website:</strong> <a href="${shelter.website}" target="_blank">Visit Website</a></p>` : ""}
       </div>
@@ -331,6 +266,7 @@ async function loadShelterDetails(shelterId) {
     `;
   }
 }
+
 
 async function displayAllShelters() {
   try {

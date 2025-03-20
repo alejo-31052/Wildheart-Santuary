@@ -1,42 +1,3 @@
-// Function to get all shelters (both predefined and custom)
-async function displayAllShelters() {
-  const sheltersGrid = document.getElementById('all-shelters');
-  sheltersGrid.innerHTML = '';
-
-  try {
-    const sheltersSnapshot = await firebase.firestore().collection('shelters').get();
-
-    if (sheltersSnapshot.empty) {
-      sheltersGrid.innerHTML = '<p>No shelters found.</p>';
-      return;
-    }
-
-    sheltersSnapshot.forEach((doc) => {
-      const shelter = doc.data();
-
-      const shelterCard = `
-        <div class="shelter-card">
-          <div class="shelter-card-image">
-            <img src="${shelter.image || 'https://placehold.co/500x300?text=No+Image'}" alt="${shelter.name}">
-          </div>
-          <div class="shelter-card-content">
-            <h3>${shelter.name}</h3>
-            <p>${shelter.description}</p>
-            <a href="shelter-detail.html?id=${doc.id}" class="btn-primary">Donate Now</a>
-          </div>
-        </div>
-      `;
-
-      sheltersGrid.insertAdjacentHTML('beforeend', shelterCard);
-    });
-
-  } catch (error) {
-    console.error('Error fetching shelters from Firebase:', error);
-    sheltersGrid.innerHTML = '<p>Error loading shelters. Please try again later.</p>';
-  }
-}
-
-
 // Function to format currency
 function formatCurrency(amount) {
   return new Intl.NumberFormat("en-US", {
@@ -86,58 +47,49 @@ function createShelterDetail(shelter) {
     `;
   }
 
-  const needsHTML = shelter.donationNeeds?.length
-    ? `
-      <div class="shelter-needs">
-        <h3>Current Needs</h3>
-        <ul>${shelter.donationNeeds.map((need) => `<li>${need}</li>`).join("")}</ul>
-      </div>
-    ` : "";
-
-  const contactHTML = `
-    ${shelter.location ? `<div class="contact-item"><h4>Location</h4><p>${shelter.location}</p></div>` : ""}
-    ${shelter.contactEmail ? `<div class="contact-item"><h4>Email</h4><p>${shelter.contactEmail}</p></div>` : ""}
-    ${shelter.contactPhone ? `<div class="contact-item"><h4>Phone</h4><p>${shelter.contactPhone}</p></div>` : ""}
-    ${shelter.website ? `<div class="contact-item"><h4>Website</h4><a href="${shelter.website}" target="_blank">Visit Website</a></div>` : ""}
-  `;
-
-  const wishlistHTML = shelter.amazonWishlist ? `
-    <div class="shelter-sidebar-card">
-      <h3>Amazon Wishlist</h3>
-      <p>You can help by purchasing items directly from ${shelter.name}'s Amazon wishlist.</p>
-      <a href="${shelter.amazonWishlist}" target="_blank" class="btn-primary">View Wishlist</a>
-    </div>
-  ` : "";
-
   return `
     <div class="shelter-header">
       <h1>${shelter.name}</h1>
-      <p>${shelter.description}</p>
+      <p>${shelter.description || ''}</p>
     </div>
 
     <div class="shelter-content">
       <div class="shelter-main">
-        <img src="${shelter.image || "https://placehold.co/800x400?text=Shelter"}" alt="${shelter.name}" class="shelter-image">
+        <img src="${shelter.image || 'https://placehold.co/800x400?text=Shelter'}" alt="${shelter.name}" class="shelter-image">
 
         <div class="shelter-info">
           <h2>About ${shelter.name}</h2>
-          <p>${shelter.longDescription || shelter.description}</p>
-          ${needsHTML}
-        </div>
-
-        <div class="donation-section">
-          <h2>Support ${shelter.name}</h2>
-          <!-- Donation forms and tabs would be implemented here -->
+          <p>${shelter.longDescription || shelter.description || ''}</p>
         </div>
       </div>
 
       <div class="shelter-sidebar">
         <div class="shelter-sidebar-card">
           <h3>Contact Information</h3>
-          ${contactHTML}
+          <p><strong>Address:</strong> ${shelter.address || 'Not provided'}</p>
+          <p><strong>City & Province:</strong> ${shelter.cityProvince || 'Not provided'}</p>
+          <p><strong>Country:</strong> ${shelter.country || 'Not provided'}</p>
+          <p><strong>Email:</strong> 
+            ${shelter.contactEmail 
+              ? `<a href="mailto:${shelter.contactEmail}">${shelter.contactEmail}</a>` 
+              : 'Not provided'}
+          </p>
+          <p><strong>Phone:</strong> ${shelter.contactPhone || 'Not provided'}</p>
+          <p><strong>Website:</strong> 
+            ${shelter.website ? `<a href="${shelter.website}" target="_blank">Visit Website</a>` : 'Not provided'}
+          </p>
         </div>
-        ${wishlistHTML}
+
+        ${shelter.amazonWishlist ? `
+          <div class="shelter-sidebar-card">
+            <h3>Amazon Wishlist</h3>
+            <p>You can help by purchasing items directly from ${shelter.name}'s Amazon wishlist.</p>
+            <a href="${shelter.amazonWishlist}" target="_blank" class="btn-primary">View Wishlist</a>
+          </div>` 
+          : ''
+        }
       </div>
     </div>
   `;
 }
+
