@@ -42,19 +42,43 @@ function displayFeaturedShelters() {
 }
 
 // Display all shelters on shelters page
-function displayAllShelters() {
-  const allSheltersContainer = document.getElementById("all-shelters")
-  if (!allSheltersContainer) return
+async function displayAllShelters() {
+  const sheltersGrid = document.getElementById('all-shelters');
+  sheltersGrid.innerHTML = '';
 
-  // Get all shelters
-  const allShelters = getAllShelters()
+  try {
+    const sheltersSnapshot = await firebase.firestore().collection('shelters').get();
 
-  // Create HTML for each shelter card
-  const shelterCardsHTML = allShelters.map((shelter) => createShelterCard(shelter)).join("")
+    if (sheltersSnapshot.empty) {
+      sheltersGrid.innerHTML = '<p>No shelters found.</p>';
+      return;
+    }
 
-  // Add cards to container
-  allSheltersContainer.innerHTML = shelterCardsHTML
+    sheltersSnapshot.forEach((doc) => {
+      const shelter = doc.data();
+
+      const shelterCard = `
+        <div class="shelter-card">
+          <div class="shelter-card-image">
+            <img src="${shelter.image || 'https://placehold.co/500x300?text=No+Image'}" alt="${shelter.name}">
+          </div>
+          <div class="shelter-card-content">
+            <h3>${shelter.name}</h3>
+            <p>${shelter.description}</p>
+            <a href="shelter-detail.html?id=${doc.id}" class="btn-primary">Donate Now</a>
+          </div>
+        </div>
+      `;
+
+      sheltersGrid.insertAdjacentHTML('beforeend', shelterCard);
+    });
+
+  } catch (error) {
+    console.error('Error fetching shelters from Firebase:', error);
+    sheltersGrid.innerHTML = '<p>Error loading shelters. Please try again later.</p>';
+  }
 }
+
 
 // Load shelter details on shelter detail page
 function loadShelterDetails(shelterId) {
@@ -242,6 +266,138 @@ function setupDonationForm(shelterId) {
       const frequency = document.querySelector('input[name="frequency"]:checked').value
       donateButton.textContent = `Donate $${amount} ${frequency}`
     }
+  }
+}
+
+async function loadShelterDetails(shelterId) {
+  const shelterDetailContainer = document.getElementById('shelter-detail');
+
+  try {
+    const shelterDoc = await firebase.firestore().collection('shelters').doc(shelterId).get();
+
+    if (!shelterDoc.exists) {
+      shelterDetailContainer.innerHTML = `
+        <div class="shelter-not-found">
+          <h1>Shelter Not Found</h1>
+          <p>The shelter you're looking for doesn't exist or has been removed.</p>
+          <a href="shelters.html" class="btn-primary">Back to Shelters</a>
+        </div>
+      `;
+      return;
+    }
+
+    const shelter = shelterDoc.data();
+
+    const shelterHTML = `
+      <h1>${shelter.name}</h1>
+      <p>${shelter.description}</p>
+
+      <img src="${shelter.image || "https://placehold.co/800x400?text=No+Image"}" alt="${shelter.name}" class="shelter-image">
+
+      <div class="shelter-info">
+        <h2>About ${shelter.name}</h2>
+        <p>${shelter.longDescription || shelter.description}</p>
+      </div>
+
+      <div class="shelter-sidebar-card">
+        <h3>Contact Information</h3>
+        ${shelter.address ? `<p><strong>Address:</strong> ${shelter.address}</p>` : ""}
+        ${shelter.cityProvince ? `<p><strong>City & Province:</strong> ${shelter.cityProvince}</p>` : ""}
+        ${shelter.country ? `<p><strong>Country:</strong> ${shelter.country}</p>` : ""}
+        ${shelter.contactEmail ? `<p><strong>Email:</strong> ${shelter.contactEmail}</p>` : ""}
+        ${shelter.contactPhone ? `<p><strong>Phone:</strong> ${shelter.contactPhone}</p>` : ""}
+        ${shelter.website ? `<p><strong>Website:</strong> <a href="${shelter.website}" target="_blank">Visit Website</a></p>` : ""}
+      </div>
+
+      ${shelter.amazonWishlist ? `
+        <div class="shelter-sidebar-card">
+          <h3>Amazon Wishlist</h3>
+          <p>You can help by purchasing items directly from ${shelter.name}'s Amazon wishlist.</p>
+          <a href="${shelter.amazonWishlist}" target="_blank" class="btn-primary">View Wishlist</a>
+        </div>
+      ` : ''}
+    `;
+
+    shelterDetailContainer.innerHTML = shelterHTML;
+
+  } catch (error) {
+    console.error("Error loading shelter details:", error);
+    shelterDetailContainer.innerHTML = `
+      <div class="shelter-not-found">
+        <h1>Error Loading Shelter</h1>
+        <p>There was a problem loading the shelter details. Please try again later.</p>
+        <a href="shelters.html" class="btn-primary">Back to Shelters</a>
+      </div>
+    `;
+  }
+}
+
+async function displayAllShelters() {
+  try {
+    const sheltersSnapshot = await firebase.firestore().collection('shelters').get();
+    const shelters = sheltersSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    const container = document.getElementById('all-shelters');
+    const countryFilter = document.getElementById('country-filter');
+    const cityFilter = document.getElementById('city-filter');
+    const needsFilter = document.getElementById('needs-filter'); // Agregado para filtrar por necesidades
+
+    // Crear listas únicas de países y ciudades (se queda dinámico)
+    const countries = new Set();
+    const cities = new Set();
+    shelters.forEach(shelter => {
+      if (shelter.country) countries.add(shelter.country);
+      if (shelter.cityProvince) cities.add(shelter.cityProvince);
+    });
+
+    // Llenar select de países
+    countries.forEach(country => {
+      const option = document.createElement('option');
+      option.value = country;
+      option.textContent = country;
+      countryFilter.appendChild(option);
+    });
+
+    // Llenar select de ciudades
+    cities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      option.textContent = city;
+      cityFilter.appendChild(option);
+    });
+
+    function renderShelters(filteredShelters) {
+      container.innerHTML = filteredShelters.map(createShelterCard).join('');
+    }
+
+    // Mostrar todos al inicio
+    renderShelters(shelters);
+
+    // Filtrar según selección
+    function applyFilters() {
+      const selectedCountry = countryFilter.value;
+      const selectedCity = cityFilter.value;
+      const selectedNeed = needsFilter.value; // Nuevo filtro por necesidad
+
+      const filtered = shelters.filter(shelter => {
+        const countryMatch = selectedCountry === 'All' || shelter.country === selectedCountry;
+        const cityMatch = selectedCity === 'All' || shelter.cityProvince === selectedCity;
+        const needsMatch = selectedNeed === 'All' || (shelter.donationNeeds && shelter.donationNeeds.includes(selectedNeed));
+        return countryMatch && cityMatch && needsMatch;
+      });
+
+      renderShelters(filtered);
+    }
+
+    countryFilter.addEventListener('change', applyFilters);
+    cityFilter.addEventListener('change', applyFilters);
+    needsFilter.addEventListener('change', applyFilters); // Listener para necesidades
+
+  } catch (error) {
+    console.error("Error fetching shelters:", error);
   }
 }
 

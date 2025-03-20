@@ -1,14 +1,41 @@
 // Function to get all shelters (both predefined and custom)
-function getAllShelters() {
-  const customShelters = JSON.parse(localStorage.getItem("customShelters") || "[]");
-  return [...shelters, ...customShelters];
+async function displayAllShelters() {
+  const sheltersGrid = document.getElementById('all-shelters');
+  sheltersGrid.innerHTML = '';
+
+  try {
+    const sheltersSnapshot = await firebase.firestore().collection('shelters').get();
+
+    if (sheltersSnapshot.empty) {
+      sheltersGrid.innerHTML = '<p>No shelters found.</p>';
+      return;
+    }
+
+    sheltersSnapshot.forEach((doc) => {
+      const shelter = doc.data();
+
+      const shelterCard = `
+        <div class="shelter-card">
+          <div class="shelter-card-image">
+            <img src="${shelter.image || 'https://placehold.co/500x300?text=No+Image'}" alt="${shelter.name}">
+          </div>
+          <div class="shelter-card-content">
+            <h3>${shelter.name}</h3>
+            <p>${shelter.description}</p>
+            <a href="shelter-detail.html?id=${doc.id}" class="btn-primary">Donate Now</a>
+          </div>
+        </div>
+      `;
+
+      sheltersGrid.insertAdjacentHTML('beforeend', shelterCard);
+    });
+
+  } catch (error) {
+    console.error('Error fetching shelters from Firebase:', error);
+    sheltersGrid.innerHTML = '<p>Error loading shelters. Please try again later.</p>';
+  }
 }
 
-// Function to get a shelter by ID
-function getShelterById(id) {
-  const allShelters = getAllShelters();
-  return allShelters.find((shelter) => shelter.id === id);
-}
 
 // Function to format currency
 function formatCurrency(amount) {

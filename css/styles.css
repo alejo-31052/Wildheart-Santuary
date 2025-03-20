@@ -1171,3 +1171,9 @@ select:focus {
   display: none !important;
 }
 
+.shelter-filter{
+  display: flex;
+  margin-bottom: 3rem;
+  gap: 2.5rem;
+  justify-content: end;
+}

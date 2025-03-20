@@ -113,27 +113,27 @@ function registerUser(name, email, password, callback) {
 }
 
 // Function to handle shelter registration
-function registerShelter(shelterData, callback) {
-  // Get existing custom shelters from localStorage
-  const customShelters = JSON.parse(localStorage.getItem("customShelters") || "[]")
+// function registerShelter(shelterData, callback) {
+//   // Get existing custom shelters from localStorage
+//   const customShelters = JSON.parse(localStorage.getItem("customShelters") || "[]")
 
-  // Check if shelter name already exists
-  if (customShelters.some((shelter) => shelter.name === shelterData.name)) {
-    return callback("A shelter with this name already exists")
-  }
+//   // Check if shelter name already exists
+//   if (customShelters.some((shelter) => shelter.name === shelterData.name)) {
+//     return callback("A shelter with this name already exists")
+//   }
 
-  // Create new shelter
-  const newShelter = {
-    id: `custom-${Date.now()}`,
-    ...shelterData,
-    donationNeeds: [],
-  }
+//   // Create new shelter
+//   const newShelter = {
+//     id: `custom-${Date.now()}`,
+//     ...shelterData,
+//     donationNeeds: [],
+//   }
 
-  // Add shelter to localStorage
-  customShelters.push(newShelter)
-  localStorage.setItem("customShelters", JSON.stringify(customShelters))
-  callback(null, newShelter)
-}
+//   // Add shelter to localStorage
+//   customShelters.push(newShelter)
+//   localStorage.setItem("customShelters", JSON.stringify(customShelters))
+//   callback(null, newShelter)
+// }
 
 // Function to handle logout
 function logout() {
@@ -269,4 +269,103 @@ async function loginUser() {
   }
 }
 
+// Function to register shelter in Firebase
+// Function to register a new shelter with authentication and store data in Firestore
+// Function to register a new shelter with authentication and store data in Firestore
+async function registerShelter() {
+  const email = document.getElementById('shelter-email').value;
+  const password = document.getElementById('shelter-password').value;
+  const confirmPassword = document.getElementById('shelter-password-confirm').value;
+
+  const name = document.getElementById('shelter-name').value;
+  const longDescription = document.getElementById('long-description').value;
+  const address = document.getElementById('address').value;
+  const cityProvince = document.getElementById('city-province').value;
+  const country = document.getElementById('country').value;
+  const postalCode = document.getElementById('postal-code').value;
+  const contactEmail = document.getElementById('contact-email').value;
+  const contactPhone = document.getElementById('contact-phone').value;
+  const website = document.getElementById('website').value;
+  const amazonWishlist = document.getElementById('amazon-wishlist').value;
+  const imageFile = document.getElementById('image').files[0];
+
+  // Get selected donation needs
+  const donationNeeds = [...document.querySelectorAll('input[name="donationNeeds"]:checked')]
+    .map(checkbox => checkbox.value);
+
+  if (password !== confirmPassword) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Passwords do not match.',
+    });
+    return;
+  }
+
+  try {
+    // Create authentication user
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    let imageBase64 = '';
+    if (imageFile) {
+      const reader = new FileReader();
+      imageBase64 = await new Promise((resolve) => {
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(imageFile);
+      });
+    }
+
+    // Shelter data to store in Firestore
+    const shelterData = {
+      name,
+      longDescription,
+      address,
+      cityProvince,
+      country,
+      postalCode,
+      contactEmail,
+      contactPhone,
+      website,
+      amazonWishlist,
+      image: imageBase64,
+      registeredEmail: email,
+      createdAt: new Date().toISOString(),
+      donationNeeds // Add donation needs array here
+    };
+
+    // Save in Firestore (collection 'shelters')
+    await db.collection('shelters').doc(user.uid).set(shelterData);
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Shelter Registered!',
+      text: 'Your shelter has been successfully registered.',
+      confirmButtonColor: '#3085d6',
+      timer: 2500,
+      timerProgressBar: true,
+      didClose: () => {
+        window.location.href = 'shelters.html';
+      }
+    });
+
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error registering shelter',
+      text: error.message,
+    });
+  }
+}
+
+// Add event listener for form submission
+document.addEventListener('DOMContentLoaded', function() {
+  const registerForm = document.getElementById('shelter-register-form');
+  if (registerForm) {
+    registerForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      registerShelter();
+    });
+  }
+});
 
