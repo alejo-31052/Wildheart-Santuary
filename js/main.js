@@ -162,6 +162,7 @@ function setupDonationForm(shelterId) {
       })
     })
   }
+  
 
   // Donation form submission
   const donationForm = document.getElementById("donation-form")
@@ -251,6 +252,15 @@ async function loadShelterDetails(shelterId) {
           <a href="${shelter.amazonWishlist}" target="_blank" class="btn-primary">View Wishlist</a>
         </div>
       ` : ''}
+
+      <!-- Botón de donación -->
+      <div class="shelter-sidebar-card text-center">
+        <h3>Support ${shelter.name}</h3>
+        <p>You can also support this shelter directly with a donation.</p>
+        <button onclick="handleDonate('${shelterId}', '${shelter.name}', '${shelter.contactEmail}')" class="btn-primary full-width" style="max-width: 300px; margin-top: 1rem;">
+          Donate with Stripe
+        </button>
+      </div>
     `;
 
     shelterDetailContainer.innerHTML = shelterHTML;
@@ -267,6 +277,28 @@ async function loadShelterDetails(shelterId) {
   }
 }
 
+function handleDonate(shelterId, shelterName, shelterEmail) {
+  const user = JSON.parse(localStorage.getItem('currentUser'));
+
+  if (!user || !user.email) {
+    // No loggeado → redirigir a login con redirect de vuelta
+    window.location.href = `login.html?redirect=shelter-detail.html?id=${shelterId}`;
+    return;
+  }
+
+  const donationInfo = {
+    donorEmail: user.email,
+    donorName: user.displayName || "Donor",
+    shelterEmail,
+    shelterName,
+    shelterId
+  };
+
+  localStorage.setItem('donationInfo', JSON.stringify(donationInfo));
+
+  // Redirigir al Stripe Checkout
+  window.location.href = "https://buy.stripe.com/test_cN2bJuceVerabIs144"; // Tu link real
+}
 
 async function displayAllShelters() {
   try {

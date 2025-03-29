@@ -670,13 +670,14 @@ ol {
 
 @media (min-width: 768px) {
   .shelter-content {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
   }
 }
 
+
 .shelter-image {
-  width: 100%;
-  height: auto;
+  width: 30%;
   border-radius: var(--radius);
   margin-bottom: 1.5rem;
 }

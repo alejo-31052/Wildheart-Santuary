@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You - PawFund</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">PawFund</a>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+        </ul>
+      </nav>
+      <div class="auth-buttons desktop-only">
+        <a href="login.html" class="btn-ghost">Login</a>
+        <a href="register-user.html" class="btn-primary">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <main>
+    <section class="auth-section container">
+      <div class="auth-card text-center">
+        <div class="auth-header">
+          <h1>🎉 Thank You!</h1>
+          <p>Your donation was successful. Your support makes a difference!</p>
+        </div>
+        
+        <div class="auth-content">
+          <p>A confirmation email has been sent to you and the shelter. If you have any questions, feel free to <a href="about.html">contact us</a>.</p>
+          <a href="index.html" class="btn-primary mt-4 inline-block">Return to Home</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-info">
+        <h3>PawFund</h3>
+        <p>Connecting animal lovers with shelters in need of support.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Account</h4>
+        <ul>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register-user.html">Register as User</a></li>
+          <li><a href="register-shelter.html">Register as Shelter</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <address>
+          <p>123 Rescue Lane</p>
+          <p>Animal City, AC 12345</p>
+          <p>info@pawfund.example</p>
+          <p>(123) 456-7890</p>
+        </address>
+      </div>
+    </div>
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; <span id="current-year"></span> PawFund. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- EmailJS - Send confirmation emails -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+
+      emailjs.init("ioiUjeaTbWXJOO2EA");
+
+      // Retrieve donation info from localStorage
+      const donationData = JSON.parse(localStorage.getItem("donationInfo"));
+
+      if (!donationData) {
+        console.error("No donation info found.");
+        return;
+      }
+
+      const emailData = {
+        to_name: donationData.donorName,
+        to_email: donationData.donorEmail,
+        shelter_name: donationData.shelterName,
+        shelter_email: donationData.shelterEmail,
+        amount: "25.00" // Optional: you can make this dynamic later
+      };
+
+      // Send confirmation to donor
+      emailjs.send("service_9xkb3bf", "template_40ohuf8", emailData)
+        .then(() => console.log("✅ Email sent to donor"))
+        .catch((err) => console.error("❌ Donor email error:", err));
+
+      // Send notification to shelter
+      emailjs.send("service_9xkb3bf", "template_ei65p1n", emailData)
+        .then(() => console.log("✅ Email sent to shelter"))
+        .catch((err) => console.error("❌ Shelter email error:", err));
+    });
+  </script>
+</body>
+</html>
