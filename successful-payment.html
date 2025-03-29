@@ -90,12 +90,14 @@
   </footer>
 
   <!-- EmailJS - Send confirmation emails -->
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('current-year').textContent = new Date().getFullYear();
 
-      emailjs.init("ioiUjeaTbWXJO02EA");
+      emailjs.init("ioiUjeaTbWXJOO2EA");
+
 
       // Retrieve donation info from localStorage
       const donationData = JSON.parse(localStorage.getItem("donationInfo"));
