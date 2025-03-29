@@ -14,15 +14,35 @@
       <a href="index.html" class="logo">PawFund</a>
       <nav class="desktop-nav">
         <ul>
-          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html" class="active">Home</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="shelters.html">Animal Shelters</a></li>
         </ul>
       </nav>
-      <div class="auth-buttons desktop-only">
+      <div class="auth-buttons desktop-only" id="auth-buttons">
         <a href="login.html" class="btn-ghost">Login</a>
         <a href="register-user.html" class="btn-primary">Register</a>
       </div>
+      <button class="menu-toggle" aria-label="Toggle Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="shelters.html">Animal Shelters</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register-user.html">Register as User</a></li>
+          <li><a href="register-shelter.html">Register as Shelter</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
@@ -95,7 +115,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('current-year').textContent = new Date().getFullYear();
 
-      emailjs.init("ioiUjeaTbWXJOO2EA");
+      emailjs.init("vztdIOEvicqEMXvUj");
 
 
       // Retrieve donation info from localStorage
