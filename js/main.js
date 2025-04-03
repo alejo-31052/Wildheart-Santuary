@@ -239,6 +239,7 @@ async function loadShelterDetails(shelterId) {
         ${shelter.address ? `<p><strong>Address:</strong> ${shelter.address}</p>` : ""}
         ${shelter.cityProvince ? `<p><strong>City & Province:</strong> ${shelter.cityProvince}</p>` : ""}
         ${shelter.country ? `<p><strong>Country:</strong> ${shelter.country}</p>` : ""}
+        ${shelter.postalCode ? `<p><strong>Postal Code:</strong> ${shelter.postalCode}</p>` : ""}
         ${shelter.contactEmail ? `<p><strong>Email:</strong> <a href="mailto:${shelter.contactEmail}">${shelter.contactEmail}</a></p>` : ""}
         ${shelter.contactPhone ? `<p><strong>Phone:</strong> ${shelter.contactPhone}</p>` : ""}
         ${shelter.website ? `<p><strong>Website:</strong> <a href="${shelter.website}" target="_blank">Visit Website</a></p>` : ""}
