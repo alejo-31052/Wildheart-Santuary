@@ -226,7 +226,6 @@ async function loadShelterDetails(shelterId) {
 
     const shelterHTML = `
       <h1>${shelter.name}</h1>
-      <p>${shelter.description}</p>
 
       <img src="${shelter.image || "https://placehold.co/800x400?text=No+Image"}" alt="${shelter.name}" class="shelter-image">
 

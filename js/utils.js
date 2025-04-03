@@ -27,8 +27,7 @@ function createShelterCard(shelter) {
         <img src="${shelter.image || "https://placehold.co/500x300?text=Shelter"}" alt="${shelter.name}">
       </div>
       <div class="shelter-card-content">
-        <h3>${shelter.name}</h3>
-        <p>${shelter.description}</p>
+        <h3 style="text-align:center;">${shelter.name}</h3>
         <a href="shelter-detail.html?id=${shelter.id}" class="btn-primary">Donate Now</a>
       </div>
     </div>
